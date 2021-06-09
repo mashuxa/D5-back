@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const { ENDPOINTS, VERSION, TMDB_API_URL } = require('../constants/constants');
-const { normalizeUrl } = require('../utils/common');
+import fetch from 'node-fetch';
+import { ENDPOINTS, VERSION, TMDB_API_URL } from '../constants/constants';
+import { normalizeUrl } from '../utils/common';
 
 const baseUrl = `${TMDB_API_URL}/${VERSION}`;
 const endpoints = {
@@ -17,8 +17,6 @@ class Api {
 
   getGenres(params) {
     const url = normalizeUrl(endpoints.genres, params);
-
-    console.warn(url);
 
     return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
   }

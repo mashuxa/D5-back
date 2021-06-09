@@ -1,0 +1,12 @@
+type Genre  {
+  id: Int
+  name: String
+}
+
+type GenreData  {
+  genres: [Genre]
+}
+
+input GenreFilters {
+  language: String
+}

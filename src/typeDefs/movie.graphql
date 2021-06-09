@@ -1,0 +1,49 @@
+type Movie {
+  id: Int
+  language: String
+  poster_path: String
+  adult: Boolean
+  overview: String
+  release_date: String
+  genre_ids: [Int]
+  original_title: String
+  title: String
+  popularity: Float
+  vote_count: Int
+  video: Boolean
+  vote_average: Float
+}
+
+type MoviesData {
+  page: Int
+  results: [Movie]
+  total_pages: Int
+  total_results: Int
+}
+
+input MovieFilters {
+#  Allowed Values: popularity.asc, popularity.desc, release_date.asc, release_date.desc, revenue.asc, revenue.desc,
+#  primary_release_date.asc, primary_release_date.desc, original_title.asc, original_title.desc, vote_average.asc,
+#  vote_average.desc, vote_count.asc, vote_count.desc
+#  default: popularity.desc
+  sort_by: String
+  page: Int
+  language: String
+  region: String
+  year: Int
+  with_genres: String
+  without_genres: String
+  vote_count: Int
+  vote_average: VoteAverage
+  primary_release_date: PrimaryReleaseDate
+}
+
+input VoteAverage {
+  gte: Float
+  lte: Float
+}
+
+input PrimaryReleaseDate {
+  gte: String
+  lte: String
+}

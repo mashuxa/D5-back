@@ -1,0 +1,4 @@
+type Query {
+  movie(filters: MovieFilters): MoviesData
+  genre(filters: GenreFilters): GenreData
+}

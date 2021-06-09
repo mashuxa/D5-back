@@ -1,6 +1,6 @@
-const moviesAPI = require('../api/moviesAPI');
+import moviesAPI from '../api/moviesAPI';
 
-module.exports = {
+export default {
   Query: {
     movie: (_, { filters }) => moviesAPI.getMovie(filters),
     genre: (_, { filters }) => moviesAPI.getGenres(filters),
