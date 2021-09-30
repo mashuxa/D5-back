@@ -5,6 +5,7 @@ export const ENDPOINTS = {
   genre: 'genre'
 };
 export const DEFAULT_APP_SETTINGS = {
-  api_key: '960c2f4daaf90d65b71f323700d3cb66',
+  api_key: process.env.THEMOVIEDB_KEY,
   language: 'en_En',
 };
+export const SALT_ROUNDS = 10;

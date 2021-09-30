@@ -1,6 +1,9 @@
-import { WishlistTC } from '../models/wishlist';
+import { Wishlist } from '../models/wishlist';
+import { composeWithMongoose } from "graphql-compose-mongoose";
 
-const WishlistQuery = {
+const WishlistTC = composeWithMongoose(Wishlist);
+
+export const WishlistQuery = {
   wishlistById: WishlistTC.getResolver('findById'),
   wishlistByIds: WishlistTC.getResolver('findByIds'),
   wishlistOne: WishlistTC.getResolver('findOne'),
@@ -10,8 +13,7 @@ const WishlistQuery = {
   wishlistPagination: WishlistTC.getResolver('pagination'),
 };
 
-const WishlistMutation = {
-  wishlistCreateOne: WishlistTC.getResolver('createOne'),
+export const WishlistMutation = {
   wishlistCreateMany: WishlistTC.getResolver('createMany'),
   wishlistUpdateById: WishlistTC.getResolver('updateById'),
   wishlistUpdateOne: WishlistTC.getResolver('updateOne'),
@@ -20,5 +22,3 @@ const WishlistMutation = {
   wishlistRemoveOne: WishlistTC.getResolver('removeOne'),
   wishlistRemoveMany: WishlistTC.getResolver('removeMany'),
 };
-
-export { WishlistQuery, WishlistMutation };

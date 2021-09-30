@@ -1,19 +1,20 @@
 import mongoose, { Schema } from 'mongoose';
 import timestamps from 'mongoose-timestamp';
-import { composeWithMongoose } from 'graphql-compose-mongoose';
+ import bcrypt from 'bcrypt';
+ import { SALT_ROUNDS } from "../constants/constants";
 
 export const UserSchema = new Schema(
   {
-    name: {
-      type: String,
-      trim: true,
-      required: true,
-    },
     email: {
       type: String,
       lowercase: true,
       trim: true,
       unique: true,
+      required: true,
+    },
+    password: {
+      type: String,
+      trim: true,
       required: true,
     },
   },
@@ -22,8 +23,10 @@ export const UserSchema = new Schema(
   }
 );
 
+UserSchema.pre('save', function() {
+  this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
+});
 UserSchema.plugin(timestamps);
 UserSchema.index({ createdAt: 1, updatedAt: 1 });
 
 export const User = mongoose.model('User', UserSchema);
-export const UserTC = composeWithMongoose(User);

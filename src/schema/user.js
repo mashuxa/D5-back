@@ -1,24 +1,55 @@
-import { UserTC } from '../models/user';
+import { User } from '../models/user';
+import bcrypt from "bcrypt";
+import { ApolloError } from "apollo-server";
+import { composeWithMongoose } from "graphql-compose-mongoose";
+import jwt from "jsonwebtoken";
 
-const UserQuery = {
-  userById: UserTC.getResolver('findById'),
-  userByIds: UserTC.getResolver('findByIds'),
-  userOne: UserTC.getResolver('findOne'),
-  userMany: UserTC.getResolver('findMany'),
-  userCount: UserTC.getResolver('count'),
-  userConnection: UserTC.getResolver('connection'),
-  userPagination: UserTC.getResolver('pagination'),
+const UserTC = composeWithMongoose(User);
+
+UserTC.addResolver({
+  name: 'logIn',
+  args: { email: 'String', password: 'String' },
+  type: UserTC,
+  resolve: async ({ args, context: { res } }) => {
+    const user = await User.findOne({ email: args.email });
+
+    if (!user || !await bcrypt.compare(args.password, user.password)) {
+      throw new ApolloError('Invalid user or password', '401');
+    }
+
+    const token = jwt.sign( { _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    res.cookie("jwttoken", token, { secure: true, httpOnly: true });
+
+    return user;
+  },
+});
+
+UserTC.addResolver({
+  name: 'logOut',
+  type: UserTC,
+  resolve: async ({ context: { res } }) => {
+    res.clearCookie("jwttoken");
+
+    return {};
+  },
+});
+
+UserTC.addResolver({
+  name: 'getUser',
+  type: UserTC,
+  resolve: ({ context: { user } }) => user,
+});
+
+UserTC.removeField('password');
+
+export const UserQuery = {
+  getUser: UserTC.getResolver('getUser'),
+  logOut: UserTC.getResolver('logOut'),
 };
-
-const UserMutation = {
-  userCreateOne: UserTC.getResolver('createOne'),
-  userCreateMany: UserTC.getResolver('createMany'),
+export const UserMutation = {
+  registration: UserTC.getResolver('createOne'),
+  logIn: UserTC.getResolver('logIn'),
   userUpdateById: UserTC.getResolver('updateById'),
-  userUpdateOne: UserTC.getResolver('updateOne'),
-  userUpdateMany: UserTC.getResolver('updateMany'),
   userRemoveById: UserTC.getResolver('removeById'),
-  userRemoveOne: UserTC.getResolver('removeOne'),
-  userRemoveMany: UserTC.getResolver('removeMany'),
 };
-
-export { UserQuery, UserMutation };
