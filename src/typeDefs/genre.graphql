@@ -6,7 +6,3 @@ type Genre  {
 type GenreData  {
   genres: [Genre]
 }
-
-input GenreFilters {
-  language: String
-}

@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const UserTC = composeWithMongoose(User);
 
 UserTC.addResolver({
-  name: 'logIn',
+  name: 'login',
   args: { email: 'String', password: 'String' },
   type: UserTC,
   resolve: async ({ args, context: { res } }) => {
@@ -26,7 +26,7 @@ UserTC.addResolver({
 });
 
 UserTC.addResolver({
-  name: 'logOut',
+  name: 'logout',
   type: UserTC,
   resolve: async ({ context: { res } }) => {
     res.clearCookie("jwttoken");
@@ -44,12 +44,12 @@ UserTC.addResolver({
 UserTC.removeField('password');
 
 export const UserQuery = {
-  getUser: UserTC.getResolver('getUser'),
-  logOut: UserTC.getResolver('logOut'),
+  user: UserTC.getResolver('getUser'),
+  logout: UserTC.getResolver('logout'),
 };
 export const UserMutation = {
   registration: UserTC.getResolver('createOne'),
-  logIn: UserTC.getResolver('logIn'),
+  login: UserTC.getResolver('login'),
   userUpdateById: UserTC.getResolver('updateById'),
   userRemoveById: UserTC.getResolver('removeById'),
 };

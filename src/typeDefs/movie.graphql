@@ -28,22 +28,18 @@ input MovieFilters {
 #  default: popularity.desc
   sort_by: String
   page: Int
-  language: String
-  region: String
   year: Int
   with_genres: String
   without_genres: String
-  vote_count: Int
   vote_average: VoteAverage
-  primary_release_date: PrimaryReleaseDate
 }
 
 input VoteAverage {
-  gte: Float
-  lte: Float
+  gte: Int
+  lte: Int
 }
 
-input PrimaryReleaseDate {
+input ReleaseDate {
   gte: String
   lte: String
 }

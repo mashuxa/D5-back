@@ -1,4 +1,6 @@
 type Query {
-  movie(filters: MovieFilters): MoviesData
-  genre(filters: GenreFilters): GenreData
+  popularMovies(page: Int): MoviesData
+  upcomingMovies(page: Int): MoviesData
+  moviesByFilters(filters: MovieFilters): MoviesData
+  genres: GenreData
 }

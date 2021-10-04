@@ -3,7 +3,7 @@ import { DEFAULT_APP_SETTINGS } from '../constants/constants';
 import { COOKIE_REGEXP } from "../constants/regexp";
 import { User } from "../models/user";
 
-export const normalizeUrl = (baseUrl, params) => Object.entries({...DEFAULT_APP_SETTINGS, ...params}).reduce((acc, [key, value]) => {
+export const normalizeUrl = (baseUrl, params = {}) => Object.entries({...DEFAULT_APP_SETTINGS, ...params}).reduce((acc, [key, value]) => {
   if (value && typeof value === 'object') {
     return Object.entries(value).reduce((subAcc, [subKey, subValue]) => `${subAcc}&${key}.${subKey}=${subValue}`, acc);
   }

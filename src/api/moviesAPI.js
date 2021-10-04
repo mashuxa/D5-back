@@ -4,19 +4,33 @@ import { normalizeUrl } from '../utils/common';
 
 const baseUrl = `${TMDB_API_URL}/${VERSION}`;
 const endpoints = {
-  discover: `${baseUrl}/${ENDPOINTS.discover}/movie`,
+  upcoming: `${baseUrl}/${ENDPOINTS.upcoming}`,
+  popular: `${baseUrl}/${ENDPOINTS.popular}`,
+  discover: `${baseUrl}/${ENDPOINTS.discoverMovie}`,
   genres: `${baseUrl}/${ENDPOINTS.genre}/movie/list`,
 };
 
 class Api {
-  getMovie(params) {
+  getPopular(page) {
+    const url = normalizeUrl(endpoints.popular, { page });
+
+    return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
+  }
+
+  getUpcoming(page) {
+    const url = normalizeUrl(endpoints.upcoming, { page });
+
+    return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
+  }
+
+  getByFilters(params) {
     const url = normalizeUrl(endpoints.discover, params);
 
     return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
   }
 
-  getGenres(params) {
-    const url = normalizeUrl(endpoints.genres, params);
+  getGenres() {
+    const url = normalizeUrl(endpoints.genres);
 
     return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
   }
