@@ -8,7 +8,7 @@ dotenv.config();
 
 const server = new ApolloServer({
   schema,
-  context: async ({ res, req}) => {
+  context: async ({ res, req }) => {
     const jwtToken = getCookie(req?.headers?.cookie, 'jwttoken');
     const user = await getUser(jwtToken);
 

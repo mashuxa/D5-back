@@ -1,6 +1,6 @@
 import { User } from '../models/user';
 import bcrypt from "bcrypt";
-import { ApolloError } from "apollo-server";
+import { AuthenticationError } from "apollo-server";
 import { composeWithMongoose } from "graphql-compose-mongoose";
 import jwt from "jsonwebtoken";
 
@@ -14,7 +14,7 @@ UserTC.addResolver({
     const user = await User.findOne({ email: args.email });
 
     if (!user || !await bcrypt.compare(args.password, user.password)) {
-      throw new ApolloError('Invalid user or password', '401');
+      throw new AuthenticationError('Invalid user or password', { code: 401 });
     }
 
     const token = jwt.sign( { _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
@@ -50,6 +50,4 @@ export const UserQuery = {
 export const UserMutation = {
   registration: UserTC.getResolver('createOne'),
   login: UserTC.getResolver('login'),
-  userUpdateById: UserTC.getResolver('updateById'),
-  userRemoveById: UserTC.getResolver('removeById'),
 };
