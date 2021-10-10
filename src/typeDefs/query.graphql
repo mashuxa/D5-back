@@ -2,5 +2,6 @@ type Query {
   popularMovies(page: Int): MoviesData
   upcomingMovies(page: Int): MoviesData
   moviesByFilters(filters: MovieFilters): MoviesData
+  movieById(id: String): Movie
   genres: GenreData
 }

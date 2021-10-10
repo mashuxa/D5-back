@@ -43,8 +43,11 @@ WishlistTC.addResolver({
   name: 'addMovieToWishlist',
   args: { id: 'String', movieId: 'String' },
   type: WishlistTC,
-  resolve: withWishlistAuthValidation((args, wishlist) =>
-    Wishlist.findOneAndUpdate({ _id: args.id }, { movies: [...wishlist.movies, args.movieId] }, { new: true })),
+  resolve: withWishlistAuthValidation((args, wishlist) => {
+    const movies = new Set([...wishlist.movies, args.movieId]);
+
+    return Wishlist.findOneAndUpdate({ _id: args.id }, { movies: Array.from(movies) }, { new: true });
+  }),
 });
 
 WishlistTC.addResolver({

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import schema from './src/schema';
 import { getCookie, getUser } from "./src/utils/common";
+import { PORT } from "./src/constants/constants";
 
 dotenv.config();
 
@@ -20,18 +21,26 @@ const server = new ApolloServer({
   },
 });
 const { MONGO_USER, MONGO_PSWD, MONGO_DB_NAME } = process.env;
-const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PSWD}@${MONGO_DB_NAME}.jbann.mongodb.net/pickby?retryWrites=true&w=majority`;
+const url = `mongodb+srv://${MONGO_USER}:${MONGO_PSWD}@${MONGO_DB_NAME}.jbann.mongodb.net/pickby?retryWrites=true&w=majority`;
 
 // Connects to database
-mongoose
-  .connect(uri)
-  .then(() => console.log("DB connected"))
-  .catch(err => console.error(err));
+const connectDB = async () => {
+  try {
+    const { version, connection } = await mongoose.connect(url);
 
-mongoose.connection.on('error', server.stop);
-mongoose.connection.once('close', server.stop);
+    console.log("DB connected", version);
+
+    connection.on('error', server.stop);
+    connection.on('close', server.stop);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+void connectDB();
+
 process.on('exit', server.stop);
 
-server.listen().then(({url}) => {
+server.listen({ port: PORT }).then(({url}) => {
   console.log(`🚀  Server ready at ${url}`);
 });

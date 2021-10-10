@@ -7,6 +7,7 @@ const endpoints = {
   upcoming: `${baseUrl}/${ENDPOINTS.upcoming}`,
   popular: `${baseUrl}/${ENDPOINTS.popular}`,
   discover: `${baseUrl}/${ENDPOINTS.discoverMovie}`,
+  movie: `${baseUrl}/${ENDPOINTS.movie}`,
   genres: `${baseUrl}/${ENDPOINTS.genre}/movie/list`,
 };
 
@@ -25,6 +26,12 @@ class Api {
 
   getByFilters(params) {
     const url = normalizeUrl(endpoints.discover, params);
+
+    return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
+  }
+
+  getById(id) {
+    const url = normalizeUrl(`${endpoints.movie}/${id}`);
 
     return fetch(url).then(res => res.json()).then(res => res).catch(console.error);
   }

@@ -12,6 +12,8 @@ type Movie {
   vote_count: Int
   video: Boolean
   vote_average: Float
+  budget: Int
+  genres: [Genre]
 }
 
 type MoviesData {
